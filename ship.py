@@ -3,7 +3,7 @@ import pygame
 class Ship:
     '''Класс для управления караблем'''
 
-    def __init__(self,ai_game):
+    def __init__(self, ai_game):
         '''Инициализировать каробль и задать его изначальную позицию'''
         self.screen = ai_game.screen
         self.settings = ai_game.settings
