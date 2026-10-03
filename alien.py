@@ -7,6 +7,7 @@ class Alien(Sprite):
         '''Инициализировать пришельца и задать его текущее разположение'''
         super().__init__()
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
 
         # Загрузить изображение пришельца и задать его rect атрибут
         self.image = pygame.image.load('images/alien_yellow.png')
@@ -18,3 +19,8 @@ class Alien(Sprite):
 
         # Размещать пришельцев по горизонтали
         self.x = float(self.rect.x)
+
+    def update(self):
+        """Сместить пришельца вправо"""
+        self.x += self.settings.alien_speed
+        self.rect.x = self.x

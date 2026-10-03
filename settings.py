@@ -14,6 +14,10 @@ class Settings:
         self.bullet_width = 6
         self.bullet_height = 35
         self.bullet_color = (252, 82, 3)
+        self.bullet_allowed = 3
 
         # Настройки корабля
         self.ship_speed = 8
+
+        # Настройки пришелца
+        self.alien_speed = 1.0

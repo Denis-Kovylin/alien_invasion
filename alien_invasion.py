@@ -13,12 +13,14 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
 
+        # Экранный режим ( ИГРОВОЙ )
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # Экранный режим ( ОКОННЫЙ )
+        # self.screen =pygame.display.set_mode((1200, 800))
+
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
-
-        print(self.settings.screen_width, self.settings.screen_height)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -31,11 +33,11 @@ class AlienInvasion:
         while True:
             self._check_event()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
 
     def _check_event(self):
-        # Следить за событиями мыши и клавиатуры ( Диспечер Событий )
+        '''Следить за событиями мыши и клавиатуры ( Диспечер Событий )'''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -64,8 +66,9 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         '''Создать новый выстрел и добавить его в группу выстрелов'''
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullet_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _create_fleet(self):
         '''Создать флот пришельцев'''
@@ -73,8 +76,6 @@ class AlienInvasion:
         # Растояние между пришельцами ровняеться ширине одного пришельца
         alien = Alien(self)
         alien_width, alien_heigh = alien.rect.size
-
-        print(alien_width, alien_heigh)
 
         available_space_x = self.settings.screen_width - 2 * alien_width
         number_aliens_x = available_space_x // (2 * alien_width)
@@ -99,8 +100,19 @@ class AlienInvasion:
         self.aliens.add(alien)
         alien.rect.y = alien.y
 
+    def _update_bullets(self):
+        '''Обновлять позыцыю выстрелов и избавляться от старых выстрелов'''
+        # Обновлять позицию выстрелов
+        self.bullets.update()
+
+        # Удалить выстрелы вылетевшие за верхнюю границу экрана
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+            print(len(self.bullets))
+
     def _update_screen(self):
-        # Обновить изображение и переключиться на следующий экран
+        '''Обновить изображение и переключиться на следующий экран'''
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         for bullet in self.bullets.sprites():
