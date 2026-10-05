@@ -20,4 +20,7 @@ class Settings:
         self.ship_speed = 8
 
         # Настройки пришелца
-        self.alien_speed = 1.0
+        self.alien_speed = 3.0
+        self.fleet_drop_speed = 40
+        # '1' - move_left; '-1' - move_right;
+        self.fleet_direction = 1

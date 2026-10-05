@@ -34,6 +34,7 @@ class AlienInvasion:
             self._check_event()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
 
     def _check_event(self):
@@ -100,6 +101,19 @@ class AlienInvasion:
         self.aliens.add(alien)
         alien.rect.y = alien.y
 
+    def _check_fleet_edges(self):
+        '''Реагируем относительно того, достиг ли какойто пришелец края'''
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        '''Спуск всего флота и изминение его направления'''
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
+
     def _update_bullets(self):
         '''Обновлять позыцыю выстрелов и избавляться от старых выстрелов'''
         # Обновлять позицию выстрелов
@@ -109,7 +123,11 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-            print(len(self.bullets))
+
+    def _update_aliens(self):
+        '''Проверить находиться ли флот на краю экрана, и тогда обновить позицию всех пришелцев'''
+        self._check_fleet_edges()
+        self.aliens.update()
 
     def _update_screen(self):
         '''Обновить изображение и переключиться на следующий экран'''

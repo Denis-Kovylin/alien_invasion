@@ -20,7 +20,13 @@ class Alien(Sprite):
         # Размещать пришельцев по горизонтали
         self.x = float(self.rect.x)
 
+    def check_edges(self):
+        '''Возвращает истину если пришелец достиг края экрана'''
+        screen_rect = self.screen.get_rect()
+        if self.rect.right >= screen_rect.right or self.rect.left <= 0:
+            return True
+
     def update(self):
-        """Сместить пришельца вправо"""
-        self.x += self.settings.alien_speed
+        """Сместить пришельца вправо или лево"""
+        self.x += ( self.settings.alien_speed * self.settings.fleet_direction )
         self.rect.x = self.x
